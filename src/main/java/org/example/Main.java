@@ -4,8 +4,7 @@ import javax.xml.transform.Result;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -37,55 +36,69 @@ public class Main {
     public static int queryHighestIDByType(char type, Connection con) throws SQLException {
         ArrayList<Integer> list = new ArrayList<>();
         Statement st = con.createStatement();
-        ResultSet set = st.executeQuery("select I.ID_Value from ItemType as I where I.ID_Type = \""+type+"\"");
-        if (!set.isBeforeFirst()) {
-            return 0;
+        int rowsReturned = 0;
+        if (type == 'L') {
+            rowsReturned = st.executeUpdate("call maxListID(@MAX)");
         }
-        while (set.next()) {
-            list.add(set.getInt("ID_Value"));
-        }
-        return Collections.max(list);
+        ResultSet set = st.executeQuery("select @MAX");
+        set.next();
+        return  rowsReturned != 0 ? set.getInt("@MAX") : -1;
     }
     public static boolean isEmptySet(ResultSet set) throws SQLException {
         return !set.isBeforeFirst();
     }
+    public static int recipeExist(String recipeName, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        if ( st.executeUpdate("call searchForRecipeByName(\""+recipeName+"\", @ID)") == 0) {
+            return -1;
+        }
+        ResultSet set = st.executeQuery("select @ID");
+        set.next();
+        return set.getInt("@ID");
+    }
+    public static int searchForShoppingListByDate(String currentDate, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String query = "call searchForShoppingListByDate(\""+currentDate+"\", @ID)";
+        if (st.executeUpdate(query) == 0) {
+            return -1;
+        }
+        ResultSet set = st.executeQuery("select @ID");
+        set.next();
+        return set.getInt("@ID");
+    }
+    public static void createShoppingList(String currentDate, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        int ID = queryHighestIDByType('L', con);
+        String query = "call createShoppingList("+(ID+1)+", \"" + currentDate + "\")";
+        st.executeUpdate(query);
+    }
+    public static void createSoughtItem(int ListID, int ItemID, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String query = "call createListSoughtItems("+ ListID + ", " + ItemID + ")";
+        st.executeUpdate(query);
+    }
     public static void generateShoppingListFromRecipe(String recipeName, Connection con) throws SQLException {
         // maybe move to function that checks if associated table is empty
         String currentDate = String.valueOf(LocalDate.now());
-        int recipeID;
-        Statement st = con.createStatement();
-        String query = "select R.Recipe_ID from Recipe as R where R.Recipe_name = \"" + recipeName.toLowerCase() + "\"" ;
-        ResultSet set = st.executeQuery(query);
-        
-        if (isEmptySet(set)) {
-            System.out.println("Invalid recipe name");
+        int recipeID = recipeExist(recipeName, con);
+        if (recipeID == -1) {
+            System.out.println("Invalid recipe name.");
             return;
         }
-        set.next();
-        recipeID = set.getInt("Recipe_ID");
-
-        set = st.executeQuery("select L.List_ID from ShoppingList as L where L.ListDate = \"" + currentDate + "\"");
+        int shoppingListID = searchForShoppingListByDate(currentDate, con);
+        if (shoppingListID == -1) {
+            createShoppingList(currentDate, con);
+        }
+        Statement statement = con.createStatement();
+        String query = "call retrieveIngredientsFromRecipe("+recipeID+")";
+        ResultSet set = statement.executeQuery(query);
         if (isEmptySet(set)) {
-            st.executeUpdate("insert into ShoppingList values(\""+currentDate+"\", 0, "+ queryHighestIDByType('l', con) + 1 +", 'L')");
+            return;
+        }
+        while (set.next()) {
+            createSoughtItem(shoppingListID, set.getInt("Food_ID"), con);
         }
 
-
-//        query = "select U.Food_ID from Used_ingredients as U where U.Recipe_ID == " + recipeID;
-//        set = st.executeQuery(query);
-//        ArrayList<FoodItem> used_ingredients = new ArrayList<>();
-//        while (set.next()) {
-//            ResultSet foodSet = st.executeQuery("select F.Food_mass, F.Food_cost, F.Food_name, ")
-//        }
-
-
-
-//        try (Statement statement = con.createStatement()) {
-//            String recipeSearchQuery = "select COUNT(*) from ShoppingList as SL where SL.ListDate == " + currentDate;
-//            ResultSet set = statement.executeQuery(recipeSearchQuery);
-//        }
-//        catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
 }
