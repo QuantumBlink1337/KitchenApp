@@ -142,7 +142,7 @@ public class Main {
         set.next();
         return set.getInt("@ID");
     }
-    public static void addItemToShoppingList(String itemName, Connection con) throws SQLException {
+    public static void addItemToShoppingList(String itemName, Connection con, boolean omitDisplay) throws SQLException {
         String currentDate = String.valueOf(LocalDate.now());
         int shoppingListID = searchForShoppingListByDate(currentDate, con);
         if (shoppingListID == -1) {
@@ -150,7 +150,9 @@ public class Main {
         }
         int itemID = searchForItemByName(itemName, con);
         createSoughtItem(shoppingListID, itemID, con);
-        displayShoppingList(shoppingListID, con);
+        if (!omitDisplay) {
+            displayShoppingList(shoppingListID, con);
+        }
     }
     public static ItemType userDefineItemTypeCreation(Connection con) throws SQLException {
         String foodName;
