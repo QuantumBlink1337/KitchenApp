@@ -123,7 +123,44 @@ public class Main {
         while (set.next()) {
             createSoughtItem(shoppingListID, set.getInt("Food_ID"), con);
         }
+        displayShoppingList(shoppingListID, con);
 
     }
+    public static int searchForItemByName(String name, Connection con) throws SQLException {
+        Statement statement = con.createStatement();
+        String query = "call searchForItemByName(\"" + name + "\", @ID)";
+        statement.executeUpdate(query);
+        ResultSet set = statement.executeQuery("select @ID");
+        set.next();
+        return set.getInt("@ID");
+    }
+    public static void addItemToShoppingList(String itemName, Connection con) throws SQLException {
+        String currentDate = String.valueOf(LocalDate.now());
+        int shoppingListID = searchForShoppingListByDate(currentDate, con);
+        if (shoppingListID == -1) {
+            createShoppingList(currentDate, con);
+        }
+        int itemID = searchForItemByName(itemName, con);
+        createSoughtItem(shoppingListID, itemID, con);
+        displayShoppingList(shoppingListID, con);
+    }
+
+    public static void addItemsToKitchen(LocalDate date, Connection con) throws SQLException {
+        String currentDate = date.toString();
+        int listID = searchForShoppingListByDate(currentDate, con);
+        if (listID == -1) {
+            return;
+        }
+        ArrayList<ListSoughtItem> soughtItems = new ArrayList<>();
+        Statement statement = con.createStatement();
+        ResultSet soughtSet = statement.executeQuery("call returnAllSoughtItems("+listID+")");
+        while (soughtSet.next()) {
+            soughtItems.add(new ListSoughtItem(soughtSet.getInt("Item_ID"),soughtSet.getInt("List_ID")));
+        }
+        for (ListSoughtItem item : soughtItems) {
+            boolean isFoodItem, isCleaningItem = false;
+            statement.executeUpdate("call searchForFoodItem("+item.getItemID()+", @FoodName)");
+            ResultSet nameExists = statement.executeQuery("select @FoodName");
+            if (!isEmptySet(nameExists)) {
 
 }
