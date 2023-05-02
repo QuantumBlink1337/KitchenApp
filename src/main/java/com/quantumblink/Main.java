@@ -192,11 +192,37 @@ public class Main {
             soughtItems.add(new ListSoughtItem(soughtSet.getInt("Item_ID"),soughtSet.getInt("List_ID")));
         }
         for (ListSoughtItem item : soughtItems) {
-            boolean isFoodItem, isCleaningItem = false;
-            statement.executeUpdate("call searchForFoodItem("+item.getItemID()+", @FoodName)");
-            ResultSet nameExists = statement.executeQuery("select @FoodName");
-            if (!isEmptySet(nameExists)) {
-
+            boolean isFoodItem = false, isCleaningItem = true;
+            statement.executeUpdate("call searchForFoodItem("+item.getItemID()+", @Name)");
+            ResultSet foodTypeExists = statement.executeQuery("select @Name");
+            foodTypeExists.next();
+            foodTypeExists.getString("@Name");
+            if (foodTypeExists.getString("@Name") == null) {
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("No food type was detected for this item. Would you like to create a definition? Note that by selecting no, it is assumed to be cleaning item.");
+                String input = "";
+                while (!input.equalsIgnoreCase("Y") || !input.equalsIgnoreCase("N")) {
+                    input = scanner.nextLine();
+                    if (input.equalsIgnoreCase("Y")) {
+                        insertItemType(userDefineItemTypeCreation(con), con);
+                        isFoodItem = true;
+                        isCleaningItem = false;
+                    }
+                }
+            }
+            else {
+                isFoodItem = true;
+                isCleaningItem = false;
+            }
+            if (isFoodItem) {
+                foodTypeExists.next();
+                try {
+                    statement.executeUpdate("call createFoodQuantity("+item.getItemID() +", "+item.getItemID() + ", \"" + date.plusWeeks(1).toString() + "\")");
+                }
+                catch (SQLIntegrityConstraintViolationException e) {
+                    System.out.println("Violation detected, probably duplicate. ");
+                    e.printStackTrace();
+                }
             }
         }
 
