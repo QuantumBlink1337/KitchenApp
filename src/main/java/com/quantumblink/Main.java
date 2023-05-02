@@ -74,8 +74,32 @@ public class Main {
     }
     public static void createSoughtItem(int ListID, int ItemID, Connection con) throws SQLException {
         Statement st = con.createStatement();
-        String query = "call createListSoughtItems("+ ListID + ", " + ItemID + ")";
+        deleteSoughtItem(ItemID, con);
+        String query = "call createListSoughtItem("+ ListID + ", " + ItemID + ")";
+        try {
+            st.executeUpdate(query);
+        }
+        catch (SQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void deleteSoughtItem(int ItemID, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String query = "call deleteSoughtItem("+ItemID+")";
         st.executeUpdate(query);
+    }
+    public static void displayShoppingList(int ListID, Connection con) throws SQLException {
+        String query = "call displayShoppingList("+ListID+")";
+        CallableStatement statement = con.prepareCall(query);
+        ResultSet dateSet = statement.executeQuery();
+        while (dateSet.next()) {
+            System.out.println("Date: " + dateSet.getString("ListDate"));
+        }
+        statement.getMoreResults();
+        ResultSet items = statement.getResultSet();
+        while (items.next()) {
+            System.out.println(items.getString("Item_name"));
+        }
     }
     public static void generateShoppingListFromRecipe(String recipeName, Connection con) throws SQLException {
         // maybe move to function that checks if associated table is empty
