@@ -18,23 +18,12 @@ public class Main {
             System.out.println("Connection not successful. Shutting down!");
             System.exit(0);
         }
-       generateShoppingListFromRecipe("Chicken Pesto Pasta", con);
 
 
 
-//        String itemtypeQuery = "insert into ItemType values( 'F', '00000')";
-//        String query = "insert into FoodItem values('00000', 'F', 'test_food', 100.0, 200.0, " +
-//                "'2023-4-25 22:27:00', '2023-4-25 22:30:00', 0, 0, 100, 200, 300, 400)";
-//        Statement st = con.createStatement();
-//
-//
-//
-//        st.executeUpdate(itemtypeQuery);
-//        st.executeUpdate(query);
         con.close();
     }
     public static int queryHighestIDByType(char type, Connection con) throws SQLException {
-        ArrayList<Integer> list = new ArrayList<>();
         Statement st = con.createStatement();
         int rowsReturned = 0;
         if (type == 'L') {
@@ -218,7 +207,7 @@ public class Main {
             if (isFoodItem) {
                 foodTypeExists.next();
                 try {
-                    statement.executeUpdate("call createFoodQuantity("+item.getItemID() +", "+item.getItemID() + ", \"" + date.plusWeeks(1).toString() + "\")");
+                    statement.executeUpdate("call createFoodQuantity("+item.getItemID() +", "+item.getItemID() + ", \"" + date.plusWeeks(1) + "\")");
                 }
                 catch (SQLIntegrityConstraintViolationException e) {
                     System.out.println("Violation detected, probably duplicate. ");
