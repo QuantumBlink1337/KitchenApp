@@ -44,6 +44,9 @@ public class Main {
         else if (type == 'Q') {
             rowsReturned = st.executeUpdate("call maxQuantityID(@MAX)");
         }
+        else if (type == 'F') {
+            rowsReturned = st.executeUpdate("call maxFoodTypeID(@MAX)");
+        }
 
         ResultSet set = st.executeQuery("select @MAX");
         set.next();
