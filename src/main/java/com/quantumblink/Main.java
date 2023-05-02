@@ -152,6 +152,32 @@ public class Main {
         createSoughtItem(shoppingListID, itemID, con);
         displayShoppingList(shoppingListID, con);
     }
+    public static ItemType userDefineItemTypeCreation(Connection con) throws SQLException {
+        String foodName;
+        Scanner sc = new Scanner(System.in);
+        String[] types = {"calories", "fat", "protein", "carbs"};
+        int[] values = {0, 0, 0, 0};
+        System.out.println("What is the name of the new food description?");
+        foodName = sc.nextLine();
+        for (int i = 0; i < types.length; i++) {
+            while (values[i] == 0) {
+                try {
+                    System.out.println("How many " + types[i] + " are in the food?");
+                    values[i] = sc.nextInt();
+                }
+                catch (InputMismatchException e) {
+                    System.out.println("Sorry, that wasn't a number. Try again.");
+                }
+            }
+        }
+        int Food_ID = queryHighestIDByType('F', con) + 1;
+        return new ItemType(Food_ID, foodName, values[0], values[1], values[2], values[3]);
+    }
+    public static void insertItemType(ItemType itemType, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String query = "call createFoodType("+ itemType.getFood_ID() + ", \"" + itemType.getFood_name() + "\", " +itemType.getCalories() + ", " + itemType.getFat() + ", " + itemType.getProtein() + ", " + itemType.getCarbs() + ")";
+        st.executeUpdate(query);
+    }
 
     public static void addItemsToKitchen(LocalDate date, Connection con) throws SQLException {
         String currentDate = date.toString();
