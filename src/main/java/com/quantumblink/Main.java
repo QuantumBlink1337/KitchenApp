@@ -226,6 +226,10 @@ public class Main {
                     e.printStackTrace();
                 }
             }
+            else if (isCleaningItem) {
+
+            }
+            deleteSoughtItem(item.getItemID(), con);
         }
 
 
