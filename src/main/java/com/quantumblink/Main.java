@@ -41,6 +41,10 @@ public class Main {
         if (type == 'L') {
             rowsReturned = st.executeUpdate("call maxListID(@MAX)");
         }
+        else if (type == 'Q') {
+            rowsReturned = st.executeUpdate("call maxQuantityID(@MAX)");
+        }
+
         ResultSet set = st.executeQuery("select @MAX");
         set.next();
         return  rowsReturned != 0 ? set.getInt("@MAX") : -1;
@@ -71,6 +75,7 @@ public class Main {
         Statement st = con.createStatement();
         int ID = queryHighestIDByType('L', con);
         String query = "call createShoppingList("+(ID+1)+", \"" + currentDate + "\")";
+
         st.executeUpdate(query);
     }
     public static void createSoughtItem(int ListID, int ItemID, Connection con) throws SQLException {
@@ -163,4 +168,9 @@ public class Main {
             ResultSet nameExists = statement.executeQuery("select @FoodName");
             if (!isEmptySet(nameExists)) {
 
+            }
+        }
+
+
+    }
 }
