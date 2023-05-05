@@ -202,6 +202,14 @@ begin
 	delete from ListSoughtItems where ItemID = ListSoughtItems.Item_ID;
 end//
 delimiter ;
+delimiter //
+create procedure retrieveSpoiledFoods(IN CurrentDate date)
+begin
+	select F.Quantity_ID, F.Food_ID
+    from FoodQuantity as F
+    where DATE(CurrentDate) > F.FBestBy_Date;
+end//
+delimiter ;
 
 select * from ShoppingList;
 call displayShoppingList(1);
@@ -222,11 +230,13 @@ insert into ItemType values(2, "Chicken Breast", 180, 6.23, "2023-4-20");
 insert into ItemType values(3, "Pesto", 90, 4.23, "2023-4-20");
 insert into ItemType values(4, "Popcorn", 120, 6.88, "2023-4-22");
 insert into ItemType values(5, "Salt", 2, 1.22, "2023-5-2");
+insert into ItemType values(7, "Bad Cheese", 3, 1.22, "2023-2-28");
 
 insert into FoodType values(0, "Shell Pasta",  100, 50, 25, 10);
 insert into FoodType values(1, "Sun-Dried Tomatoes", 10, 25, 50, 100);
 insert into FoodType values(2, "Chicken Breast", 1, 3, 5, 7);
 insert into FoodType values(3, "Pesto", 2, 4, 6, 8);
+insert into FoodType values(7, "Bad Cheese", 1, 3, 5, 7);
 
 insert into Used_Ingredients values(0, 0);
 insert into Used_Ingredients values(1, 0);
@@ -240,6 +250,7 @@ insert into FoodQuantity values(0, 0, "2025-1-25");
 insert into FoodQuantity values(1, 1, "2025-1-25");
 insert into FoodQuantity values(2, 2, "2023-4-25");
 insert into FoodQuantity values(3, 3, "2025-4-20");
+insert into FoodQuantity values(7, 7, "2023-3-1");
 
 insert into Recipe values(0, "Chicken Pesto Pasta", 20, 20);
 insert into Recipe values(1, "Matt's Popcorn", 20, 20);
