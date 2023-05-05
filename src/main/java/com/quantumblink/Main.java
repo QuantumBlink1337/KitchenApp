@@ -26,6 +26,9 @@ public class Main {
         ArrayList<FoodQuantity> spoiledFoodsNames;
         if ((spoiledFoodsNames = querySpoiledFoods(con)) != null) {
             System.out.println("Spoiled foods were detected!");
+            for (FoodQuantity item : spoiledFoodsNames) {
+                System.out.printf("Food name: %s | Days over expiration date: %d", item.getItem_name(), dateDayDifference(item.getFBestBy_Date(), String.valueOf(LocalDate.now())));
+            }
         }
 
 
