@@ -205,7 +205,7 @@ delimiter ;
 delimiter //
 create procedure retrieveSpoiledFoods(IN CurrentDate date)
 begin
-	select F.Quantity_ID, F.Food_ID, I.Item_name
+	select F.Quantity_ID, F.Food_ID, I.Item_name,  F.FBestBy_Date
     from FoodQuantity as F, ItemType as I
     where DATE(CurrentDate) > F.FBestBy_Date AND F.Quantity_ID = I.Item_ID;
 end//
