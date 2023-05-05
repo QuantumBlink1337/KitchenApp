@@ -31,6 +31,41 @@ public class Main {
             }
             System.out.println("You can add them to a shopping list later.");
         }
+        Scanner sc = new Scanner(System.in);
+        int input = -1;
+        while (!validInputs(input)) {
+            System.out.println("(0): Exit Program");
+            System.out.println("(1): Generate Shopping List From Recipe");
+            System.out.println("(2): Add Item to Shopping List");
+            System.out.println("(3): Add Items from Shopping List to Kitchen");
+            System.out.println("(4): Add Spoiled Items to Shopping List");
+            try {
+                input = sc.nextInt();
+                sc.nextLine();
+            }
+            catch (InputMismatchException e) {
+                // this does not work
+                System.out.println("Sorry, please try again.");
+                input = -1;
+            }
+            if (input == 0) {
+                System.out.println("Thanks for using Kitchen Management System!");
+                System.exit(0);
+            }
+            if (input == 1) {
+                System.out.println("What is the name of the recipe?");
+                String recipeName = sc.nextLine();
+                generateShoppingListFromRecipe(recipeName, con);
+                input = -1;
+            }
+            else if (input == 2) {
+                System.out.println("What is the name of the item?");
+                String itemName = sc.nextLine();
+                addItemToShoppingList(itemName, con, false);
+                input = -1;
+            }
+        }
+
 
 
 
