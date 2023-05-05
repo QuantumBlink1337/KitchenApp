@@ -214,7 +214,7 @@ public class Main {
             displayShoppingList(shoppingListID, con);
         }
     }
-    public static ItemType userDefineItemTypeCreation(Connection con) throws SQLException {
+    public static ItemType userDefineFoodType(Connection con) throws SQLException {
         String foodName;
         Scanner sc = new Scanner(System.in);
         String[] types = {"calories", "fat", "protein", "carbs"};
@@ -235,7 +235,7 @@ public class Main {
         int Food_ID = queryHighestIDByType('F', con) + 1;
         return new ItemType(Food_ID, foodName, values[0], values[1], values[2], values[3]);
     }
-    public static void insertItemType(ItemType itemType, Connection con) throws SQLException {
+    public static void insertFoodType(ItemType itemType, Connection con) throws SQLException {
         Statement st = con.createStatement();
         String query = "call createFoodType("+ itemType.getFood_ID() + ", \"" + itemType.getFood_name() + "\", " +itemType.getCalories() + ", " + itemType.getFat() + ", " + itemType.getProtein() + ", " + itemType.getCarbs() + ")";
         st.executeUpdate(query);
@@ -280,7 +280,7 @@ public class Main {
                 while (!input.equalsIgnoreCase("Y") || !input.equalsIgnoreCase("N")) {
                     input = scanner.nextLine();
                     if (input.equalsIgnoreCase("Y")) {
-                        insertItemType(userDefineItemTypeCreation(con), con);
+                        insertFoodType(userDefineFoodType(con), con);
                         isFoodItem = true;
                         isCleaningItem = false;
                     }
