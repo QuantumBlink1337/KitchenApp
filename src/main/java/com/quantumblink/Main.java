@@ -36,6 +36,15 @@ public class Main {
 
         con.close();
     }
+    public static boolean validInputs(int input) {
+        int[] validInputs = new int[]{0, 1, 2, 3, 4};
+        for (int x : validInputs) {
+            if (x == input) {
+                return true;
+            }
+        }
+        return false;
+    }
     public static int queryHighestIDByType(char type, Connection con) throws SQLException {
         Statement st = con.createStatement();
         int rowsReturned = 0;
