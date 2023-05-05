@@ -1,10 +1,15 @@
 package com.quantumblink;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -46,6 +51,21 @@ public class Main {
     }
     public static boolean isEmptySet(ResultSet set) throws SQLException {
         return !set.isBeforeFirst();
+    }
+    public static int dateDayDifference(String date_a, String date_b) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        try {
+            Date A = sdf.parse(date_a);
+            Date B = sdf.parse(date_b);
+
+            long diffInMS = Math.abs(B.getTime() - A.getTime());
+            return (int) TimeUnit.DAYS.convert(diffInMS, TimeUnit.MILLISECONDS);
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
     public static int recipeExist(String recipeName, Connection con) throws SQLException {
         Statement st = con.createStatement();
