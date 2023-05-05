@@ -18,6 +18,10 @@ public class Main {
             System.out.println("Connection not successful. Shutting down!");
             System.exit(0);
         }
+        ArrayList<FoodQuantity> spoiledFoodsNames;
+        if ((spoiledFoodsNames = querySpoiledFoods(con)) != null) {
+            System.out.println("Spoiled foods were detected!");
+        }
 
 
 
@@ -167,6 +171,20 @@ public class Main {
         Statement st = con.createStatement();
         String query = "call createFoodType("+ itemType.getFood_ID() + ", \"" + itemType.getFood_name() + "\", " +itemType.getCalories() + ", " + itemType.getFat() + ", " + itemType.getProtein() + ", " + itemType.getCarbs() + ")";
         st.executeUpdate(query);
+    }
+    public static ArrayList<FoodQuantity> querySpoiledFoods(Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String query = "call retrieveSpoiledFoods(\""+LocalDate.now()+"\")";
+        ResultSet spoiledFoodsSet = st.executeQuery(query);
+        if (isEmptySet(spoiledFoodsSet)) {
+            return null;
+        }
+        ArrayList<FoodQuantity> spoiledFood = new ArrayList<>();
+        while (spoiledFoodsSet.next()) {
+            spoiledFood.add(new FoodQuantity(spoiledFoodsSet.getInt("Quantity_ID"), spoiledFoodsSet.getInt("Food_ID"), spoiledFoodsSet.getString("Item_name"),
+                    spoiledFoodsSet.getString("FBestBy_Date")));
+        }
+        return spoiledFood;
     }
 
     public static void addItemsToKitchen(LocalDate date, Connection con) throws SQLException {
