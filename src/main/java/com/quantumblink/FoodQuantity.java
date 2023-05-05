@@ -1,12 +1,17 @@
 package com.quantumblink;
 
-import java.text.SimpleDateFormat;
-
 public class FoodQuantity {
-    private final SimpleDateFormat FBestBy_Date;
+    private final String FBestBy_Date;
     private final int Food_ID;
 
-    public SimpleDateFormat getFBestBy_Date() {
+    public FoodQuantity(int quantityId, int foodId, String itemName, String fBestByDate) {
+        FBestBy_Date = fBestByDate;
+        Food_ID = foodId;
+        Quantity_ID = quantityId;
+        Item_name = itemName;
+    }
+
+    public String getFBestBy_Date() {
         return FBestBy_Date;
     }
 
@@ -23,14 +28,14 @@ public class FoodQuantity {
     private String Item_name;
 
 
-    public FoodQuantity(SimpleDateFormat fBestByDate, int foodId, int quantityId, String itemName) {
+    public FoodQuantity(String fBestByDate, int foodId, int quantityId, String itemName) {
         FBestBy_Date = fBestByDate;
         Food_ID = foodId;
         Quantity_ID = quantityId;
         Item_name = itemName;
     }
 
-    public FoodQuantity(SimpleDateFormat FBestBy_Date, int food_ID, int quantity_ID) {
+    public FoodQuantity(String FBestBy_Date, int food_ID, int quantity_ID) {
         this.FBestBy_Date = FBestBy_Date;
         Food_ID = food_ID;
         Quantity_ID = quantity_ID;
