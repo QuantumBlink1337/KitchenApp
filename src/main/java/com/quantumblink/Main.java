@@ -220,7 +220,7 @@ public class Main {
         statement.executeUpdate(query);
         ResultSet set = statement.executeQuery("select @ID");
         set.next();
-        int ID = set.getInt("ID");
+        int ID = set.getInt("@ID");
         if (!set.wasNull()) {
             return ID;
         }
