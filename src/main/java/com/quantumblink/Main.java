@@ -290,13 +290,20 @@ public class Main {
         String query = "call createRecipe("+r.recipe_ID()+", \"" + r.recipe_name() + "\", " + r.prep_time() + ", " + r.cook_time() + ")";
         st.executeUpdate(query);
     }
+    public static void createRecipeAuthor(Recipe r, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String query = "call createRecipeAuthor(\""+r.authorName() + "\", "+r.recipe_ID()+")";
+        st.executeUpdate(query);
+    }
     public static void createUsedIngredient() {
 
     }
     public static void userDefinedRecipe(Connection con) throws SQLException {
         Scanner sc = new Scanner(System.in);
         System.out.println("What is the name of the recipe?");
-        String name = sc.nextLine();
+        String recipeName = sc.nextLine();
+        System.out.println("Who wrote the recipe?");
+        String authorName = sc.nextLine();
         sc.nextLine();
         int prep = 0;
         while (prep <= 0) {
@@ -320,8 +327,9 @@ public class Main {
             }
         }
         sc.nextLine();
-        Recipe r = new Recipe((queryHighestIDByType('R', con) + 1), name, prep, cook);
+        Recipe r = new Recipe((queryHighestIDByType('R', con) + 1), recipeName, prep, cook, authorName);
         createRecipe(r, con);
+        createRecipeAuthor(r, con);
 
 
     }

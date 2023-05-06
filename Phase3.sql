@@ -152,6 +152,12 @@ begin
 end//
 delimiter ;
 delimiter //
+create procedure createRecipeAuthor(IN Author varchar(50), ID int)
+begin
+	insert into RecipeAuthor values(Author, ID);
+end//
+delimiter ;
+delimiter //
 create procedure createFoodType(IN Food_ID int, Food_name varchar(50), cal int, fat int, protein int, carb int)
 begin
 	insert into FoodType values(Food_ID, Food_name, cal, fat, protein, carbs);
