@@ -1,6 +1,8 @@
 package com.quantumblink;
 
 public class FoodType {
+    // TODO
+    // convert to record
     private final int Food_ID;
     private final String Food_name;
     private final int calories;

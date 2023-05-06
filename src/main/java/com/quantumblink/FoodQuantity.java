@@ -1,6 +1,8 @@
 package com.quantumblink;
 
 public class FoodQuantity {
+    // TODO
+    // convert to record
     private final String FBestBy_Date;
     private final int Food_ID;
 

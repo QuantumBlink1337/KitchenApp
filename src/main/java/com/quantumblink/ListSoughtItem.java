@@ -1,6 +1,8 @@
 package com.quantumblink;
 
 public class ListSoughtItem {
+    // TODO
+    // convert to record
     private final int ItemID;
     private final int ListID;
 
