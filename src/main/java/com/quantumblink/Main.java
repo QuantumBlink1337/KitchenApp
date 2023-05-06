@@ -335,6 +335,19 @@ public class Main {
         Recipe r = new Recipe((queryHighestIDByType('R', con) + 1), recipeName, prep, cook, authorName);
         createRecipe(r, con);
         createRecipeAuthor(r, con);
+        System.out.println("Now we will add ingredients to your recipe.");
+        String ingredientName = "";
+        while (!ingredientName.equalsIgnoreCase("done")) {
+            System.out.println("Enter the name of the ingredient to add. (Type \"done\" to close this dialog.");
+            ingredientName = sc.nextLine();
+           // int ItemID = searchForItemByName(ingredientName, con, true);
+            if (!foodItemExists(ingredientName, con)) {
+                System.out.println("A food definition was not found for that name. Creating one!");
+                createFoodType(userDefineFoodType(con), con);
+            }
+            int FoodID = queryHighestIDByType('F', con);
+            createUsedIngredient(FoodID, r.recipe_ID(), con);
+        }
 
 
     }
@@ -388,7 +401,7 @@ public class Main {
                 isCleaningItem = false;
             }
             if (isFoodItem) {
-                foodTypeExists.next();
+           //     foodTypeExists.next();
                 try {
                     statement.executeUpdate("call createFoodQuantity("+item.getItemID() +", "+item.getItemID() + ", \"" + date.plusWeeks(1) + "\")");
                 }
