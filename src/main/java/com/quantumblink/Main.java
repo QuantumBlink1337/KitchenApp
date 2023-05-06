@@ -77,6 +77,7 @@ public class Main {
             }
             else if (input == 5) {
                 userDefinedRecipe(con);
+                input = -1;
             }
         }
 
@@ -105,6 +106,10 @@ public class Main {
         }
         else if (type == 'F') {
             rowsReturned = st.executeUpdate("call maxFoodTypeID(@MAX)");
+        }
+        else if (type == 'R') {
+            rowsReturned = st.executeUpdate("call maxRecipeID(@MAX)");
+
         }
 
         ResultSet set = st.executeQuery("select @MAX");
@@ -243,7 +248,7 @@ public class Main {
         System.out.println("What is the name of the new food description?");
         foodName = sc.nextLine();
         for (int i = 0; i < types.length; i++) {
-            while (values[i] == 0) {
+            while (values[i] <= 0) {
                 try {
                     System.out.println("How many " + types[i] + " are in the food?");
                     values[i] = sc.nextInt();
