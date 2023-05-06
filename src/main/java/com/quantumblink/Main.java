@@ -213,6 +213,7 @@ public class Main {
         displayShoppingList(shoppingListID, con);
 
     }
+    // Returns the ID of the found item. You can create the item if nothing is found and return the subsequent new ID, otherwise return -1 nothing found.
     public static int searchForItemByName(String name, Connection con, boolean createIfNotFound) throws SQLException {
         Statement statement = con.createStatement();
         String query = "call searchForItemByName(\"" + name + "\", @ID)";
@@ -224,7 +225,9 @@ public class Main {
             return ID;
         }
         else if (createIfNotFound) {
-            createItemType(name, queryHighestIDByType('F', con), con);
+            ID = queryHighestIDByType('F', con) + 1;
+            createItemType(name, ID, con);
+            return ID;
         }
         return -1;
     }
