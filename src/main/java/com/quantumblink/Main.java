@@ -204,13 +204,20 @@ public class Main {
         displayShoppingList(shoppingListID, con);
 
     }
-    public static int searchForItemByName(String name, Connection con) throws SQLException {
+    public static int searchForItemByName(String name, Connection con, boolean createIfNotFound) throws SQLException {
         Statement statement = con.createStatement();
         String query = "call searchForItemByName(\"" + name + "\", @ID)";
         statement.executeUpdate(query);
         ResultSet set = statement.executeQuery("select @ID");
         set.next();
-        return set.getInt("@ID");
+        int ID = set.getInt("ID");
+        if (!set.wasNull()) {
+            return ID;
+        }
+        else if (createIfNotFound) {
+            createItemType(name, queryHighestIDByType('F', con), con);
+        }
+        return -1;
     }
     public static void addItemToShoppingList(String itemName, Connection con, boolean omitDisplay) throws SQLException {
         String currentDate = String.valueOf(LocalDate.now());
@@ -218,7 +225,7 @@ public class Main {
         if (shoppingListID == -1) {
             createShoppingList(currentDate, con);
         }
-        int itemID = searchForItemByName(itemName, con);
+        int itemID = searchForItemByName(itemName, con, false);
         createSoughtItem(shoppingListID, itemID, con);
         if (!omitDisplay) {
             displayShoppingList(shoppingListID, con);
