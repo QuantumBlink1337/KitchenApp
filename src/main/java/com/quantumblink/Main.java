@@ -336,6 +336,23 @@ public class Main {
 
 
     }
+    public static boolean foodItemExists(int ItemID, Connection con) throws SQLException {
+        Statement statement = con.createStatement();
+        statement.executeUpdate("call searchForFoodItem("+ItemID+", @Name)");
+        ResultSet foodTypeExists = statement.executeQuery("select @Name");
+        foodTypeExists.next();
+        return foodTypeExists.getString("@Name") == null;
+    }
+    public static boolean foodItemExists(String name, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String call = "call searchForFoodTypeByName(\""+name+"\", @ID)";
+        st.executeUpdate(call);
+        String query = "select @ID";
+        ResultSet set = st.executeQuery(query);
+        set.next();
+        set.getInt("@ID");
+        return !set.wasNull();
+    }
 
     public static void addItemsToKitchen(LocalDate date, Connection con) throws SQLException {
         String currentDate = date.toString();
@@ -351,11 +368,7 @@ public class Main {
         }
         for (ListSoughtItem item : soughtItems) {
             boolean isFoodItem = false, isCleaningItem = true;
-            statement.executeUpdate("call searchForFoodItem("+item.getItemID()+", @Name)");
-            ResultSet foodTypeExists = statement.executeQuery("select @Name");
-            foodTypeExists.next();
-            foodTypeExists.getString("@Name");
-            if (foodTypeExists.getString("@Name") == null) {
+            if (foodItemExists(item.getItemID(), con)) {
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("No food type was detected for this item. Would you like to create a definition? Note that by selecting no, it is assumed to be cleaning item.");
                 String input = "";
