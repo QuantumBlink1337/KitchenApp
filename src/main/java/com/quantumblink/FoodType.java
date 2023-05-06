@@ -1,13 +1,13 @@
 package com.quantumblink;
 
-public class ItemType {
+public class FoodType {
     private final int Food_ID;
     private final String Food_name;
     private final int calories;
     private final int fat;
     private final int protein;
 
-    public ItemType(int food_ID, String food_name, int calories, int fat, int protein, int carbs) {
+    public FoodType(int food_ID, String food_name, int calories, int fat, int protein, int carbs) {
         Food_ID = food_ID;
         Food_name = food_name;
         this.calories = calories;

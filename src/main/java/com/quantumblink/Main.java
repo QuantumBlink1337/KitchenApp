@@ -233,11 +233,11 @@ public class Main {
             }
         }
         int Food_ID = queryHighestIDByType('F', con) + 1;
-        return new ItemType(Food_ID, foodName, values[0], values[1], values[2], values[3]);
+        return new FoodType(Food_ID, foodName, values[0], values[1], values[2], values[3]);
     }
-    public static void insertFoodType(ItemType itemType, Connection con) throws SQLException {
+    public static void insertFoodType(FoodType foodType, Connection con) throws SQLException {
         Statement st = con.createStatement();
-        String query = "call createFoodType("+ itemType.getFood_ID() + ", \"" + itemType.getFood_name() + "\", " +itemType.getCalories() + ", " + itemType.getFat() + ", " + itemType.getProtein() + ", " + itemType.getCarbs() + ")";
+        String query = "call createFoodType("+ foodType.getFood_ID() + ", \"" + foodType.getFood_name() + "\", " + foodType.getCalories() + ", " + foodType.getFat() + ", " + foodType.getProtein() + ", " + foodType.getCarbs() + ")";
         st.executeUpdate(query);
     }
     public static ArrayList<FoodQuantity> querySpoiledFoods(Connection con) throws SQLException {
