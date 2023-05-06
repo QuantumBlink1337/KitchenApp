@@ -276,6 +276,46 @@ public class Main {
         }
         return spoiledFood;
     }
+    public static void createRecipe(Recipe r, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String query = "call createRecipe("+r.recipe_ID()+", \"" + r.recipe_name() + "\", " + r.prep_time() + ", " + r.cook_time() + ")";
+        st.executeUpdate(query);
+    }
+    public static void createUsedIngredient() {
+
+    }
+    public static void userDefinedRecipe(Connection con) throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("What is the name of the recipe?");
+        String name = sc.nextLine();
+        sc.nextLine();
+        int prep = 0;
+        while (prep <= 0) {
+            System.out.println("Prep time?");
+            try {
+                prep = sc.nextInt();
+            }
+            catch (InputMismatchException e) {
+                System.out.println("Sorry, that wasn't a number.");
+            }
+        }
+        sc.nextLine();
+        int cook = 0;
+        while (cook <= 0) {
+            System.out.println("Cook time?");
+            try {
+                cook = sc.nextInt();
+            }
+            catch (InputMismatchException e) {
+                System.out.println("Sorry, that wasn't a number.");
+            }
+        }
+        sc.nextLine();
+        Recipe r = new Recipe((queryHighestIDByType('R', con) + 1), name, prep, cook);
+        createRecipe(r, con);
+
+
+    }
 
     public static void addItemsToKitchen(LocalDate date, Connection con) throws SQLException {
         String currentDate = date.toString();
