@@ -39,6 +39,7 @@ public class Main {
             System.out.println("(2): Add Item to Shopping List");
             System.out.println("(3): Add Items from Shopping List to Kitchen");
             System.out.println("(4): Add Spoiled Items to Shopping List");
+            System.out.println("(5): Create Recipe");
             try {
                 input = sc.nextInt();
                 sc.nextLine();
@@ -74,6 +75,9 @@ public class Main {
                 }
                 input = -1;
             }
+            else if (input == 5) {
+                userDefinedRecipe(con);
+            }
         }
 
 
@@ -82,7 +86,7 @@ public class Main {
         con.close();
     }
     public static boolean validInputs(int input) {
-        int[] validInputs = new int[]{0, 1, 2, 3, 4};
+        int[] validInputs = new int[]{0, 1, 2, 3, 4, 5};
         for (int x : validInputs) {
             if (x == input) {
                 return true;
