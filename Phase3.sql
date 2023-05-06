@@ -220,6 +220,14 @@ begin
     where ID = F.Food_ID;
 end//
 delimiter ;
+delimiter //
+create procedure searchForFoodTypeByName(IN SearchedName varchar(50), OUT ID int)
+begin
+	select F.Food_ID into ID
+    from FoodType as F
+    where SearchedName = F.Food_name;
+end//
+delimiter ;
 call searchForFoodItem(4, @ID);
 select @ID;
 delimiter //
