@@ -298,8 +298,10 @@ public class Main {
         String query = "call createRecipeAuthor(\""+r.authorName() + "\", "+r.recipe_ID()+")";
         st.executeUpdate(query);
     }
-    public static void createUsedIngredient() {
-
+    public static void createUsedIngredient(int foodID, int recipeID, Connection con) throws SQLException {
+        Statement statement = con.createStatement();
+        String query = "call createUsedIngredient("+foodID + ", " + recipeID + ")";
+        statement.executeUpdate(query);
     }
     public static void userDefinedRecipe(Connection con) throws SQLException {
         Scanner sc = new Scanner(System.in);
