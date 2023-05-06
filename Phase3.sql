@@ -103,6 +103,14 @@ begin
 end//
 delimiter ;
 delimiter //
+create procedure maxRecipeID (OUT MAX int)
+begin
+	select MAX(L.Recipe_ID) into MAX
+    from Recipe as L;
+    
+end//
+delimiter ;
+delimiter //
 create procedure maxQuantityID (OUT MAX int)
 begin
 	select MAX(Q.Quantity_ID) into MAX
