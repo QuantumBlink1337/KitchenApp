@@ -250,6 +250,11 @@ public class Main {
         String query = "call createFoodType("+ foodType.getFood_ID() + ", \"" + foodType.getFood_name() + "\", " + foodType.getCalories() + ", " + foodType.getFat() + ", " + foodType.getProtein() + ", " + foodType.getCarbs() + ")";
         st.executeUpdate(query);
     }
+    public static void createItemType(String name, int ID, Connection con) throws SQLException {
+        Statement st = con.createStatement();
+        String query = "call createItemType("+ID+", \""+name+"\", null, null, null)";
+        st.executeUpdate(query);
+    }
     public static ArrayList<FoodQuantity> querySpoiledFoods(Connection con) throws SQLException {
         Statement st = con.createStatement();
         String query = "call retrieveSpoiledFoods(\""+LocalDate.now()+"\")";

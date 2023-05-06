@@ -150,6 +150,12 @@ begin
 end//
 delimiter ;
 delimiter //
+create procedure createItemType(IN ID int, Iname varchar(50), mass float, cost float, IDate date) 
+begin
+	insert into ItemType values(ID, Iname, mass, cost, IDate);
+end//
+delimiter ;
+delimiter //
 create procedure displayShoppingList(IN ListID int) 
 begin
 	select SL.ListDate
@@ -221,7 +227,7 @@ call maxListID(@MAX);
 select @MAX;
 
 
-call searchForItemByName("Shell Pasta", @ID);
+call searchForItemByName("Pepper", @ID);
 call displayShoppingList(2);
 select @ID;
 insert into ItemType values(0, "Shell Pasta", 123.5, 3.73, "2023-4-20");
