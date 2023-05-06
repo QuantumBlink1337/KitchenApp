@@ -164,6 +164,12 @@ begin
 end//
 delimiter ;
 delimiter //
+create procedure createUsedIngredient(IN Food int, Recipe int)
+begin
+	insert into Used_Ingredients values(Food, Recipe);
+end//
+delimiter ;
+delimiter //
 create procedure returnAllSoughtItems(IN ListID int) 
 begin
 	select * from ListSoughtItems where ListID = ListSoughtItems.List_ID;
