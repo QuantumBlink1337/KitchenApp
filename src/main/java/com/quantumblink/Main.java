@@ -252,7 +252,7 @@ public class Main {
         int Food_ID = queryHighestIDByType('F', con) + 1;
         return new FoodType(Food_ID, foodName, values[0], values[1], values[2], values[3]);
     }
-    public static void insertFoodType(FoodType foodType, Connection con) throws SQLException {
+    public static void createFoodType(FoodType foodType, Connection con) throws SQLException {
         Statement st = con.createStatement();
         String query = "call createFoodType("+ foodType.getFood_ID() + ", \"" + foodType.getFood_name() + "\", " + foodType.getCalories() + ", " + foodType.getFat() + ", " + foodType.getProtein() + ", " + foodType.getCarbs() + ")";
         st.executeUpdate(query);
@@ -302,7 +302,7 @@ public class Main {
                 while (!input.equalsIgnoreCase("Y") || !input.equalsIgnoreCase("N")) {
                     input = scanner.nextLine();
                     if (input.equalsIgnoreCase("Y")) {
-                        insertFoodType(userDefineFoodType(con), con);
+                        createFoodType(userDefineFoodType(con), con);
                         isFoodItem = true;
                         isCleaningItem = false;
                     }
