@@ -64,6 +64,16 @@ public class Main {
                 addItemToShoppingList(itemName, con, false);
                 input = -1;
             }
+            else if (input == 3) {
+                addItemsToKitchen(LocalDate.now(), con);
+                input = -1;
+            }
+            else if (input == 4 && spoiledFoodsNames != null) {
+                for (FoodQuantity item : spoiledFoodsNames) {
+                    addItemToShoppingList(item.getItem_name(), con, true);
+                }
+                input = -1;
+            }
         }
 
 
@@ -214,7 +224,7 @@ public class Main {
             displayShoppingList(shoppingListID, con);
         }
     }
-    public static ItemType userDefineFoodType(Connection con) throws SQLException {
+    public static FoodType userDefineFoodType(Connection con) throws SQLException {
         String foodName;
         Scanner sc = new Scanner(System.in);
         String[] types = {"calories", "fat", "protein", "carbs"};
